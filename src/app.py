@@ -22,15 +22,15 @@ todos = [
 @app.route('/todos', methods=['GET'])
 def get_todo():
     response = {
-        'message': "send your lisr of todos",
+        'message': "send your list of todos",
         "todos": todos
     }
     return jsonify(response), 200
 
 @app.route('/todos', methods=['POST'])
 def add_todo():
-    request_body = request.json()
-    print('received new POST request', request.body)
+    request_body = request.get_json()
+    print('received new POST request', request_body)
     todos.append(request_body)
     response = {
         "message": "receive new POST todo",
@@ -38,7 +38,18 @@ def add_todo():
     }
     return jsonify(response), 200
   
-
+@app.route('/todos/<int:id>', methods=['DELETE'])
+def delete_todo(id):
+    for todo in todos:
+        if todo.get('id') == id:
+            todos.remove(todo)
+            break
+    response = {
+        "message": f"receive the request to delete for id {id}",
+        "todos": todos
+    }
+   
+    return jsonify(response), 200
 
 
 
