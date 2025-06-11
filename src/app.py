@@ -51,7 +51,21 @@ def delete_todo(id):
    
     return jsonify(response), 200
 
+@app.route('/todos/<int:id>', methods=['PUT'])
+def update_todo(id):
+    data = request.get_json()
 
+    for todo in todos:
+        if todo['id'] == id:
+            todo['label'] = data.get('label', todo['label'])
+            todo['done'] = data.get('done', todo['done'])
+
+            response = {
+                'message': f"id {id} todo is updated",
+                "todos": todo
+            }
+            return jsonify(response), 200
+    return jsonify({'message': f'Todo with id {id} not found'}), 404
 
 
 
